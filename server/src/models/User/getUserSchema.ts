@@ -1,7 +1,6 @@
 import { ZodError, z } from 'zod'
 
 const userSchema = z.object({
-    name: z.string().max(50),
     password: z.string().max(50),
     email: z.string().max(50),
 })
