@@ -12,15 +12,21 @@ interface FormInputProps {
   isRequired: boolean,
   label: string,
   type: string,
+  value?: any,
+  setValue?: () => void,
+  inputProps?: {},
+  formControlProps?: {}
 }
 
 export const FormInput = (props: FormInputProps) => {
-  const { formik, name, isRequired, label, type } = props
+  const { formik, name, isRequired, label, type, inputProps, formControlProps } = props
 
   return (
-    <FormControl id={name} isRequired={isRequired} isInvalid={!!formik.errors[name] && formik.touched[name]}>
+    <FormControl {...formControlProps}
+      id={name} isRequired={isRequired} isInvalid={!!formik.errors[name] && formik.touched[name]}>
       <FormLabel>{label}</FormLabel>
       <Input
+        {...inputProps}
         autoComplete='true'
         type={type}
         {...formik.getFieldProps({ name })}

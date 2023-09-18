@@ -1,49 +1,30 @@
-import React, { ReactNode } from 'react';
-import {
-  IconButton,
-  Box,
-  CloseButton,
-  Flex,
-  Icon,
-  useColorModeValue,
-  Link,
-  Drawer,
-  DrawerContent,
-  Text,
-  useDisclosure,
-  BoxProps,
-  FlexProps,
-} from '@chakra-ui/react';
-import {
-  FiHome,
-  FiEdit,
-  FiEdit2,
-  FiBookOpen,
-  FiStar,
-  FiLogOut,
-  FiMenu,
-} from 'react-icons/fi';
+import React, { ReactComponentElement, ReactNode } from 'react';
+import { IconButton, Box, CloseButton, Flex, Icon, useColorModeValue, Link, Drawer, DrawerContent, Text, useDisclosure, BoxProps, FlexProps, HStack, VStack, Spacer, } from '@chakra-ui/react';
+import { FiHome, FiEdit, FiEdit2, FiBookOpen, FiLogOut, FiMenu, } from 'react-icons/fi';
 import { IconType } from 'react-icons';
-import { Navigate, NavigateFunction, useNavigate } from 'react-router-dom';
+import { Navigate, NavigateFunction, Route, useNavigate } from 'react-router-dom';
+import AlertDialogButton from '../Buttons/AlertDialogButton'
+import RouteButton from '../Buttons/RouteButton';
 
 interface LinkItemProps {
   name: string;
   icon: IconType;
   route: string,
+  component?: () => void
 }
 
 const LinkItems: Array<LinkItemProps> = [
   { name: 'Home', icon: FiHome, route: '/' },
   { name: 'Product Create ', icon: FiEdit, route: '/product/create' },
   { name: 'Product List', icon: FiBookOpen, route: '/product/list' },
-  { name: 'Review Create', icon: FiEdit2, route: '#' },
-  { name: 'Review List', icon: FiBookOpen, route: '#' },
-  { name: 'Log out', icon: FiLogOut, route: '/login' },
+  { name: 'Review List', icon: FiBookOpen, route: '/review/list' },
+  // { name: 'Log out', icon: FiLogOut, route: '/login' },
 ];
 
 
 export default function Sidebar({ children }: { children: ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
       <SidebarContent
@@ -64,6 +45,7 @@ export default function Sidebar({ children }: { children: ReactNode }) {
       </Drawer>
       {/* mobilenav */}
       <MobileNav display={{ base: 'flex', md: 'none' }} onOpen={onOpen} />
+      {/* content */}
       <Box ml={{ base: 0, md: 60 }} p="4">
         {children}
       </Box>
@@ -73,6 +55,27 @@ export default function Sidebar({ children }: { children: ReactNode }) {
 
 interface SidebarProps extends BoxProps {
   onClose: () => void;
+}
+
+const sidebarCssBtn = {
+  align: "center",
+  p: "4",
+  mx: "4",
+  borderRadius: "lg",
+  role: "group",
+  cursor: "pointer",
+  _hover: {
+    bg: 'cyan.400',
+    color: 'white',
+  }
+}
+
+const sidebarCssLogoutBtn = {
+  align: "center",
+  p: "4",
+  mx: "4",
+  borderRadius: "lg",
+  role: "group",
 }
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
@@ -93,61 +96,24 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         </Text>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
-      {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon} route={link.route || ''} nav={navigate}>
-          {link.name}
-        </NavItem>
-      ))}
+      <VStack
+        align={"stretch"}
+      >
+
+        {LinkItems.map((link) => (
+          <RouteButton key={link.name} navFunc={navigate} routeTo={link.route} children={link.name} icon={link.icon} styles={sidebarCssBtn} />
+        ))}
+        <AlertDialogButton alertActionTxt={"Logout"} alertBodyTxt={"Are you sure you want to logout?"} icon={FiLogOut} children='Logout' styles={sidebarCssLogoutBtn} alertHdrTxt={"Logout"} buttonTxt={"Logout"} />
+      </VStack>
     </Box>
   );
 };
 
-interface NavItemProps extends FlexProps {
-  icon: IconType;
-  children: string;
-  route: string,
-  nav: NavigateFunction
-}
-const NavItem = ({ icon, children, route, nav, ...rest }: NavItemProps) => {
-  return (
-    <Link href="#" style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}
-      onClick={() => {
-        if(children === 'Log out')
-          localStorage.clear() 
-        nav(route)
-      }
-      }>
-      <Flex
-        align="center"
-        p="4"
-        mx="4"
-        borderRadius="lg"
-        role="group"
-        cursor="pointer"
-        _hover={{
-          bg: 'cyan.400',
-          color: 'white',
-        }}
-        {...rest}>
-        {icon && (
-          <Icon
-            mr="4"
-            fontSize="16"
-            _groupHover={{
-              color: 'white',
-            }}
-            as={icon}
-          />
-        )}
-        {children}
-      </Flex>
-    </Link>
-  );
-};
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
 }
+
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   return (
     <Flex

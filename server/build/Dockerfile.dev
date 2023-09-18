@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:18
 COPY ["package.json","/usr/src/"]
 WORKDIR /usr/src/
 RUN npm install

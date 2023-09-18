@@ -1,36 +1,38 @@
 version: '3.7'
 services:
-  db:
-    image: mongo:latest 
-    container_name: mi_mongo
-    ports:
-      - 27018:27017
-    volumes:
-      - ./init.js:/docker-entrypoint-initdb.d/init.js:ro
-      - ~/mongodata:/data/db
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: mysecretpass
+  # db:
+  #   image: mongo:latest 
+  #   container_name: mi_mongo
+  #   ports:
+  #     - 27018:27017
+  #   volumes:
+  #     - ./init.js:/docker-entrypoint-initdb.d/init.js:ro
+  #     - ~/mongodata:/data/db
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: admin
+  #     MONGO_INITDB_ROOT_PASSWORD: mysecretpass
   server:
     build: 
       context: ./server
       dockerfile: ./build/Dockerfile.dev
-    depends_on:
-      - db
+    # depends_on:
+    #   - db
     ports:
       - "3001:3001"
     environment:
-      URL_MONGO: mongodb://admin:mysecretpass@db/DATABASE?authSource=admin 
-      MONGO_USR: admin
-      MONGO_PASS: mysecretpass
+      MONGO_URI: ${MONGO_URI} 
+      MONGO_USR: ${MONGO_USR}
+      MONGO_PASS: ${MONGO_PASS}
     volumes:
       - ./server:/usr/src/
   client:
     build:
       context: ./client
       dockerfile: ./build/Dockerfile.dev
-    depends_on:
-      - db
+    environment:
+      REACT_APP_SERVER_ENDPOINT: ${SERVER_ENDPOINT}
+    # depends_on:
+    #   - db
     ports:
       - "3002:3000"
     volumes:

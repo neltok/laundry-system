@@ -4,9 +4,11 @@ interface Register {
   email: string
 }
 
+const API = process.env.REACT_APP_SERVER_ENDPOINT
+
 export const Register = async (userData: Register) => {
   try {
-    const response = await fetch('http://127.0.0.1:3001/user/create', {
+    const response = await fetch(API + '/user/create', {
       method: "POST",
       mode: "cors",
       headers: { "Content-Type": "application/json" },
@@ -18,6 +20,6 @@ export const Register = async (userData: Register) => {
       data: await response.json()
     }
   } catch (e: any) {
-    return { success: false, error: e.message }
+    return { success: false, error: e || e.message }
   }
 }

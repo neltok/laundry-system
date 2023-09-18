@@ -3,25 +3,30 @@ interface Login {
   email: string
 }
 
+const API = process.env.REACT_APP_SERVER_ENDPOINT
+
 export const Login = async (userData: Login) => {
   try {
-    const response = await fetch('http://127.0.0.1:3001/user/get', {
+    const response = await fetch(API + '/user/get', {
       method: "POST",
       mode: "cors",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userData)
     })
 
+    console.log(response);
+    
     const responseData = await response.json();
     if (!responseData.success) throw responseData.error
     console.log(responseData);
-    
+
 
     return {
       success: true,
       userId: responseData.user[0]._id
     }
   } catch (e: any) {
-    return { success: false, error: e.message }
+    console.log(e);
+    return { success: false, error: e.message || e}
   }
 }

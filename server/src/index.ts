@@ -1,38 +1,54 @@
-import express from 'express'
-import { createUser } from './routes/User/createUser'
+import express from 'express';
+import { createUser } from './routes/User/createUser';
 import { createProduct } from './routes/Product/createProduct';
 import { getProducts } from './routes/Product/getProducts';
 import { createReview } from './routes/Review/createReview';
-import { getAllReviews } from './routes/Review/getAllReviews';
+import { getReviews } from './routes/Review/getReviews';
 import { getUser } from './routes/User/getUser';
-import cors from 'cors'
-const bodyParserErrorHandler = require('express-body-parser-error-handler')
+import cors from 'cors';
+import { getUserById } from './routes/User/getUserById';
+import { getCount } from './controllers/Review/getCount';
 
-const app = express()
-const port = process.env.PORT || 3001
-const allowedOrigins = ['http://localhost:3001', 'http://localhost:3000', 'http://127.0.0.1:3001'];
+const app = express();
+const port = process.env.PORT || 3001;
+const allowedOrigins = [
+  'http://localhost:3001',
+  'http://localhost:3000',
+  'http://127.0.0.1:3001',
+  'http://localhost:3002',
+];
+
 const options: cors.CorsOptions = {
-  origin: allowedOrigins
+  origin: allowedOrigins,
 };
-// app.use(bodyParserErrorHandler());
-app.use(cors(options));
-app.use(express.json());
-app.get('/', (req, res) => {
-  res.send('Express + TypeScript Server')
-})
+
+const router = express.Router();
+
+// Middleware para las rutas bajo '/api/v1/'
+router.use(express.json());
+router.use(cors(options));
 
 // user routes
-app.post('/user/create', createUser)
-app.post('/user/get', getUser)
+router.post('/user/create', createUser);
+router.post('/user/get', getUser);
+router.post('/user/getById', getUserById);
 
 // product routes
-app.post('/product/create', createProduct)
-app.post('/product/get', getProducts)
+router.post('/product/create', createProduct);
+router.post('/product/get', getProducts);
 
 // review routes
-app.post('/review/create', createReview)
-app.post('/review/getAll', getAllReviews)
+router.post('/review/create', createReview);
+router.post('/review/get', getReviews);
+router.post('/review/getCount', getCount);
+
+// Monta el enrutador bajo '/api/v1/'
+app.use('/api/v1', router);
+
+app.get('/', (req, res) => {
+  res.send('Express + TypeScript Server');
+});
 
 app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`)
-})
+  console.log(`[server]: Server is running at http://localhost:${port}`);
+});

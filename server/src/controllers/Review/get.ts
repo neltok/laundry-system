@@ -1,19 +1,32 @@
-import { ObjectId } from "mongodb"
+import { WithId } from "mongodb"
 import { connectToMongo } from "../../db/db"
+import { validateGetReview } from "../../models/Review/reviewGetSchema"
 
-export const get = async (id?: ObjectId) => {
-    try {
-        if (id && !ObjectId.isValid(id))
-            throw 'Invalid ObjectId'
+interface getProps {
+  top: number,
+  productId?: string,
+}
 
-        const dbo = await connectToMongo()
-        const filter = id ? { _id: new ObjectId(id) } : {}
-        const products = await dbo.db.collection('reviews').find(filter).toArray()
+interface Result {
+  success: boolean,
+  reviews?: WithId<Document>[] | any,
+  error?: any
+}
 
-        await dbo.client.close()
+export const get = async (props: getProps):Promise<Result> => {
+  try {
+    // console.log(props);
+    const validate = validateGetReview(props)
+    if (!validate.isValid) throw JSON.stringify(validate.error)
+    
+    const dbo = await connectToMongo()
+    const filter = props.productId ? { productId: props.productId } : {}
+    const reviews = await dbo.db.collection('reviews').find(filter).limit(props.top).toArray()
 
-        return { success: true, reviews: products }
-    } catch (e) {
-        return { success: false, error: e }
-    }
+    await dbo.client.close()
+
+    return { success: true, reviews: reviews }
+  } catch (e) {
+    return { success: false, error: e }
+  }
 }

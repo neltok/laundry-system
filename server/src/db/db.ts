@@ -4,13 +4,13 @@ interface dbo {
     client: MongoClient
 }
 export async function connectToMongo(): Promise<dbo> {
-    const uri = process.env.URL_MONGO || ''
+    const uri = process.env.MONGO_URI || ''
     const client = new MongoClient(uri)
 
     try {
         await client.connect()
         console.log('connected to mongo')
-        const db = client.db('admin')
+        const db = client.db('test')
 
         return {
             db: db,

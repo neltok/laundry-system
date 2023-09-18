@@ -12,6 +12,7 @@ import {
   Heading,
   Text,
   useColorModeValue,
+  useToast,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from "yup";
@@ -25,6 +26,7 @@ const validationSchema = Yup.object({
 })
 
 export default function LoginComponent() {
+  const toast = useToast()
   const navigate = useNavigate()
   const formik = useFormik({
     initialValues: {
@@ -33,11 +35,20 @@ export default function LoginComponent() {
     },
     validationSchema: validationSchema,
     onSubmit: async (userData) => {
-      const exist = await Login(userData)
+      const loginResponse = await Login(userData)
 
-      if(exist.success){
-        localStorage.setItem('userId', exist.userId)
+      if(loginResponse.success){
+        localStorage.setItem('userId', loginResponse.userId)
         navigate('/')
+      }
+      else {
+        toast({
+          title: 'Error.',
+          description: loginResponse.error,
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        })
       }
     }
   })

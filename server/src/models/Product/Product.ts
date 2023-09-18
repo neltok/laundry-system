@@ -3,5 +3,6 @@ export interface Product {
     image: string,
     description: string,
     price: number,
-    userId: string
+    userId: string,
+    reviewCount?: number
 }

@@ -15,7 +15,7 @@ import * as Yup from "yup";
 import { FormInput } from "./FormInput";
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@chakra-ui/react';
-import { CreateNewProduct } from "../api/CreateNewProduct";
+import { CreateProduct } from "../api/CreateProduct";
 
 const validationSchema = Yup.object({
   name: Yup.string().max(50).required("Name is required"),
@@ -29,21 +29,25 @@ const validationSchema = Yup.object({
   price: Yup.number().min(1).required("Price is required"),
 });
 
-export default function CreateProduct() {
+export default function CreateProductForm() {
   const [error, setError] = useState('')
-  const toast = useToast()
   const navigate = useNavigate()
+  const toast = useToast()
   const formik = useFormik({
     initialValues: {
       name: "Lentes",
       description: "Unos lentes bien padres",
-      price: 0.0,
+      price: '',
       image: "https://opticaexpress.hn/wp-content/uploads/2021/06/RAY-BAN-3RO01804.png",
     },
     validationSchema: validationSchema,
-    onSubmit: async (productData, {resetForm}) => {
+    onSubmit: async (formData, {resetForm}) => {
       const userId = localStorage.getItem('userId') || ''
-      const newProduct = await CreateNewProduct(productData, userId)
+      const productData ={
+        ...formData,
+        userId: userId
+      }
+      const newProduct = await CreateProduct(productData)
       if (!newProduct.success) {
         toast({
           title: 'Error.',
@@ -67,14 +71,14 @@ export default function CreateProduct() {
 
   return (
     <Flex
-      minH={'100vh'}
+      // minH={'100vh'}
       align={'center'}
       justify={'center'}
     >
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
           <Heading fontSize={'4xl'} textAlign={'center'}>
-            Create a new product
+            &nbsp;&nbsp;Create a new product&nbsp;&nbsp;
           </Heading>
         </Stack>
         <form onSubmit={formik.handleSubmit}>
@@ -119,9 +123,6 @@ export default function CreateProduct() {
                   loadingText="Submitting"
                   size="md"
                   colorScheme="teal"
-                // onClick={() => {
-
-                // }}
                 >
                   Create
                 </Button>

@@ -1,10 +1,9 @@
 import { Request, Response } from "express";
-import { get } from "../../controllers/Product/get";
+import { getById } from "../../controllers/User/getById";
 
-export const getProducts = async (req: Request, res: Response) => {
+export const getUserById = async (req: Request, res: Response) => {
   try {
-    console.log('getAllProducts');
-    const response = await get(req.body)
+    const response = await getById(req.body)
     console.log(response);
 
     res.status(200).json(response)

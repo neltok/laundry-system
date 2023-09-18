@@ -2,15 +2,12 @@ import { ObjectId } from 'mongodb'
 import { ZodError, z } from 'zod'
 
 const reviewSchema = z.object({
-  comment: z.string().max(200).optional(),
-  rating: z.string().refine((value) => /^[1-5]$/.test(value)).transform(Number),
-  userId: z.string().refine((val) => ObjectId.isValid(val), "Must be a valid ObjectId"),
   productId: z.string().refine((val) => ObjectId.isValid(val), "Must be a valid ObjectId")
 })
 
 type Review = z.infer<typeof reviewSchema>
 
-export const validateReview = (review: Review) => {
+export const validateGetReviewCount = (review: Review) => {
   try {
     reviewSchema.parse(review)
     return { isValid: true }

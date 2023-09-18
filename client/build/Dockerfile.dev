@@ -1,7 +1,6 @@
-FROM node:18-alpine
+FROM node:18
 COPY ["package.json","/usr/src/"]
 WORKDIR /usr/src/
-RUN npm install
+RUN npm install --legacy-peer-deps
 COPY [".","/usr/src/"]
-# RUN npm run build
-CMD npm start
+CMD npm run start
