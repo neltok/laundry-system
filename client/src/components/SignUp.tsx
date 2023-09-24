@@ -12,7 +12,7 @@ import {
 import { Register } from "../api/Register";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { FormInput } from "./FormInput";
+import { FormInput } from "./Inputs/FormInput";
 import { useNavigate } from 'react-router-dom';
 
 const validationSchema = Yup.object({

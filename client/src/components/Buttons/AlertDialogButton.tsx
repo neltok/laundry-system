@@ -21,15 +21,16 @@ interface ButtonProps {
   icon: IconType;
   children: string;
   navFunc?: NavigateFunction
+  routeTo: string
   onClose?: () => void,
   styles: any
-  alertBodyTxt: String
-  alertHdrTxt: String
-  alertActionTxt: String
-  buttonTxt: String
+  alertBodyTxt: string
+  alertHdrTxt: string
+  alertActionTxt: string
+  buttonTxt: string
 }
 
-export default function AlertDialogButton({ styles, icon, buttonTxt, alertHdrTxt, alertBodyTxt, alertActionTxt, ...rest }: ButtonProps) {
+export default function AlertDialogButton({ styles, icon, buttonTxt, alertHdrTxt, alertBodyTxt, alertActionTxt, navFunc, routeTo, ...rest }: ButtonProps) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const cancelRef = React.useRef(null)
 
@@ -49,7 +50,7 @@ export default function AlertDialogButton({ styles, icon, buttonTxt, alertHdrTxt
           />
         )} */}
         <Button
-        leftIcon={<FiLogOut/>}
+          leftIcon={<FiLogOut />}
           colorScheme='red' onClick={onOpen}>
           {buttonTxt}
         </Button>
@@ -66,14 +67,17 @@ export default function AlertDialogButton({ styles, icon, buttonTxt, alertHdrTxt
             </AlertDialogHeader>
 
             <AlertDialogBody>
-             {alertBodyTxt}
+              {alertBodyTxt}
             </AlertDialogBody>
 
             <AlertDialogFooter>
               <Button ref={cancelRef} onClick={onClose}>
                 Cancel
               </Button>
-              <Button colorScheme='red' onClick={onClose} ml={3}>
+              <Button colorScheme='red' onClick={() => {
+                if (navFunc && routeTo)
+                  navFunc(routeTo)
+              }} ml={3}>
                 {alertActionTxt}
               </Button>
             </AlertDialogFooter>

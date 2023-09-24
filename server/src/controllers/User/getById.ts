@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb"
 import { connectToMongo } from "../../db/db"
-import { getUserSchema, validateGetUserById } from "../../models/User/getUserByIdSchema"
+import { getUserSchema, validateGetUserById } from "../../schemas/User/getUserByIdSchema"
 
 export const getById = async (getUserData: getUserSchema) => {
   try {
@@ -9,6 +9,10 @@ export const getById = async (getUserData: getUserSchema) => {
     if (!validate.isValid) throw JSON.stringify(validate.error)
 
     const dbo = await connectToMongo()
+
+    if ("error" in dbo)
+      throw new Error(dbo.error)
+
     const objectsIds = getUserData.usersIds!.map(e => { return new ObjectId(e) })
 
     const filter: {} = getUserData.usersIds ? { _id: { $in: objectsIds } } : {};
@@ -16,7 +20,7 @@ export const getById = async (getUserData: getUserSchema) => {
 
     await dbo.client.close()
 
-    if (users.length === 0) throw 'User not found'
+    if (users?.length === 0) throw 'User not found'
 
     return { success: true, users: users }
   } catch (e) {

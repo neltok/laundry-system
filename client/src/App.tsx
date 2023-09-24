@@ -4,10 +4,8 @@ import LoginComponent from './components/Login';
 import { ChakraProvider } from '@chakra-ui/react';
 import SignUp from './components/SignUp';
 import Sidebar from './components/Sidebar/Sidebar';
-import ProductSimple from './components/Product';
-import CreateProductForm from './components/CreateProductForm'
 import { ProductsTable } from './components/ProductsTable';
-import { ReviewTable } from './components/ReviewTable';
+import NewServiceForm from './components/Forms/NewServiceForm';
 
 function App() {
   const location = useLocation();
@@ -18,10 +16,10 @@ function App() {
       {/* <Router> */}
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<LoginComponent />} />
-          <Route path="/product/view" element={<Sidebar><ProductSimple /></Sidebar>} />
-          <Route path="/product/create" element={<Sidebar><CreateProductForm /></Sidebar>} />
-          <Route path="/product/list" element={<Sidebar><ProductsTable /></Sidebar>} />
-          <Route path="/review/list" element={<Sidebar><ReviewTable /></Sidebar>} />
+          <Route path="/service/create" element={<Sidebar><NewServiceForm /></Sidebar>} />
+          {/* <Route path="/product/view" element={<Sidebar><ProductSimple /></Sidebar>} /> */}
+          {/* <Route path="/product/list" element={<Sidebar><ProductsTable /></Sidebar>} />
+          <Route path="/review/list" element={<Sidebar><ReviewTable /></Sidebar>} /> */}
           <Route path="/" element={<Sidebar><ProductsTable /></Sidebar>} />
       {/* </Router> */}
         </Routes>

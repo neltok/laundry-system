@@ -8,6 +8,8 @@ import { getUser } from './routes/User/getUser';
 import cors from 'cors';
 import { getUserById } from './routes/User/getUserById';
 import { getCount } from './controllers/Review/getCount';
+import { CreateService } from './routes/Service/CreateService';
+import { GetServices } from './routes/Service/GetServices';
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -33,9 +35,9 @@ router.post('/user/create', createUser);
 router.post('/user/get', getUser);
 router.post('/user/getById', getUserById);
 
-// product routes
-router.post('/product/create', createProduct);
-router.post('/product/get', getProducts);
+// service routes
+router.post('/service/create', CreateService);
+router.post('/service/get', GetServices);
 
 // review routes
 router.post('/review/create', createReview);

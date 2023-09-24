@@ -9,63 +9,50 @@ import {
   useColorModeValue,
   Link,
 } from "@chakra-ui/react";
-
+import ServiceFormVS from "../Schemas/ServiceFormVS"
 import { useFormik } from "formik";
-import * as Yup from "yup";
-import { FormInput } from "./Inputs/FormInput";
+import { FormInput } from "../Inputs/FormInput";
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@chakra-ui/react';
-import { CreateProduct } from "../api/CreateProduct";
 
-const validationSchema = Yup.object({
-  name: Yup.string().max(50).required("Name is required"),
-  description: Yup.string().max(50).required("Description is required"),
-  image: Yup.string()
-    .matches(
-      /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
-      'Enter correct url!'
-    )
-    .required('Please enter website'),
-  price: Yup.number().min(1).required("Price is required"),
-});
 
-export default function CreateProductForm() {
+export default function NewServiceForm() {
   const [error, setError] = useState('')
   const navigate = useNavigate()
   const toast = useToast()
   const formik = useFormik({
     initialValues: {
-      name: "Lentes",
-      description: "Unos lentes bien padres",
-      price: '',
-      image: "https://opticaexpress.hn/wp-content/uploads/2021/06/RAY-BAN-3RO01804.png",
+      // name: "Lentes",
+      // description: "Unos lentes bien padres",
+      // price: '',
+      // image: "https://opticaexpress.hn/wp-content/uploads/2021/06/RAY-BAN-3RO01804.png",
     },
-    validationSchema: validationSchema,
-    onSubmit: async (formData, {resetForm}) => {
-      const userId = localStorage.getItem('userId') || ''
-      const productData ={
-        ...formData,
-        userId: userId
-      }
-      const newProduct = await CreateProduct(productData)
-      if (!newProduct.success) {
-        toast({
-          title: 'Error.',
-          description: newProduct.error,
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        });
-      } else if (newProduct.success) {
-        toast({
-          title: 'Success.',
-          description: 'New product created',
-          status: 'success',
-          duration: 3000,
-          isClosable: true,
-        });
-        resetForm()
-      }
+    validationSchema: ServiceFormVS,
+    onSubmit: async (formData, { resetForm }) => {
+      // const userId = localStorage.getItem('userId') || ''
+      // const productData = {
+      //   ...formData,
+      //   userId: userId
+      // }
+      // const newProduct = await CreateProduct(productData)
+      // if (!newProduct.success) {
+      //   toast({
+      //     title: 'Error.',
+      //     description: newProduct.error,
+      //     status: 'error',
+      //     duration: 3000,
+      //     isClosable: true,
+      //   });
+      // } else if (newProduct.success) {
+      //   toast({
+      //     title: 'Success.',
+      //     description: 'New product created',
+      //     status: 'success',
+      //     duration: 3000,
+      //     isClosable: true,
+      //   });
+      //   resetForm()
+      // }
     },
   });
 
@@ -78,10 +65,12 @@ export default function CreateProductForm() {
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
           <Heading fontSize={'4xl'} textAlign={'center'}>
-            &nbsp;&nbsp;Create a new product&nbsp;&nbsp;
+            &nbsp;&nbsp;Register new service&nbsp;&nbsp;
           </Heading>
         </Stack>
-        <form onSubmit={formik.handleSubmit}>
+        <form
+          onSubmit={formik.handleSubmit}
+        >
           <Box
             rounded={'lg'}
             bg={useColorModeValue('white', 'gray.700')}
@@ -91,29 +80,29 @@ export default function CreateProductForm() {
               <FormInput
                 formik={formik}
                 isRequired={true}
-                label="Name"
+                label="Customer Name"
                 name="name"
                 type="text"
               />
               <FormInput
                 formik={formik}
                 isRequired={true}
-                label="Description"
-                name="description"
+                label="Customer phone"
+                name="name"
                 type="text"
               />
               <FormInput
                 formik={formik}
                 isRequired={true}
-                label="Price"
+                label="Weight (KG)"
                 name="price"
                 type="text"
               />
               <FormInput
                 formik={formik}
                 isRequired={true}
-                label="Image"
-                name="image"
+                label="Observations"
+                name="description"
                 type="text"
               />
               <Stack spacing={10} pt={2}>

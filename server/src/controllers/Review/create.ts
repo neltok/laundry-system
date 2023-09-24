@@ -1,6 +1,6 @@
-import { validateReview } from "../../models/Review/reviewSchema"
+import { validateReview } from "../../schemas/Review/reviewSchema"
 import { connectToMongo } from "../../db/db"
-import { Review } from "../../models/Review/Review"
+import { Review } from "../../schemas/Review/Review"
 import { ObjectId } from "mongodb"
 
 export const create = async (newReview: Review) => {
@@ -9,6 +9,8 @@ export const create = async (newReview: Review) => {
     if (!validate.isValid) throw JSON.stringify(validate.error)
 
     const dbo = await connectToMongo()
+
+    if ("error" in dbo) throw new Error(dbo.error)
     const inserted = await dbo.db.collection('reviews').insertOne(newReview)
 
     if (!inserted.insertedId) throw 'Error: Not inserted! ' + JSON.stringify(newReview)
@@ -17,10 +19,10 @@ export const create = async (newReview: Review) => {
       { _id: new ObjectId(newReview.productId) },
       { $inc: { reviewsCount: 1 } }
     )
-    
-    if(!result.ok)
+
+    if (!result.ok)
       throw JSON.stringify(result.lastErrorObject)
-    
+
     await dbo.client.close()
 
     return { success: true }

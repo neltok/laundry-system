@@ -1,6 +1,6 @@
 import { WithId } from "mongodb"
 import { connectToMongo } from "../../db/db"
-import { validateGetReview } from "../../models/Review/reviewGetSchema"
+import { validateGetReview } from "../../schemas/Review/reviewGetSchema"
 
 interface getProps {
   top: number,
@@ -13,13 +13,15 @@ interface Result {
   error?: any
 }
 
-export const get = async (props: getProps):Promise<Result> => {
+export const get = async (props: getProps): Promise<Result> => {
   try {
     // console.log(props);
     const validate = validateGetReview(props)
     if (!validate.isValid) throw JSON.stringify(validate.error)
-    
+
     const dbo = await connectToMongo()
+    if ("error" in dbo) throw new Error(dbo.error)
+
     const filter = props.productId ? { productId: props.productId } : {}
     const reviews = await dbo.db.collection('reviews').find(filter).limit(props.top).toArray()
 

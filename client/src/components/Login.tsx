@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from "yup";
-import { FormInput } from './FormInput';
+import { FormInput } from './Inputs/FormInput';
 import { useFormik } from 'formik';
 import { Login } from '../api/Login'
 

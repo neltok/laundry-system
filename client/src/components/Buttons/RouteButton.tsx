@@ -2,17 +2,6 @@ import { Flex, FlexProps, Icon, Link, useDisclosure } from "@chakra-ui/react";
 import React from "react";
 import { IconType } from "react-icons";
 import { NavigateFunction } from "react-router-dom";
-import {
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogContent,
-  AlertDialogOverlay,
-  AlertDialogCloseButton,
-  Button,
-  AlertDialogProps,
-} from '@chakra-ui/react'
 interface NavItemProps extends FlexProps {
   icon: IconType;
   children: string;

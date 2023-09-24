@@ -1,6 +1,6 @@
 import { Button, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, useToast } from "@chakra-ui/react"
 import React, { MouseEventHandler, useState } from "react"
-import { FormInput } from "./FormInput"
+import { FormInput } from "./Inputs/FormInput"
 import { useFormik } from "formik"
 import * as Yup from "yup"
 import { CreateReview } from "../api/CreateReview"

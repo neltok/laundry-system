@@ -15,9 +15,9 @@ interface LinkItemProps {
 
 const LinkItems: Array<LinkItemProps> = [
   { name: 'Home', icon: FiHome, route: '/' },
-  { name: 'Product Create ', icon: FiEdit, route: '/product/create' },
-  { name: 'Product List', icon: FiBookOpen, route: '/product/list' },
-  { name: 'Review List', icon: FiBookOpen, route: '/review/list' },
+  { name: 'New Service', icon: FiEdit, route: '/service/create' },
+  // { name: 'Product List', icon: FiBookOpen, route: '/product/list' },
+  // { name: 'Review List', icon: FiBookOpen, route: '/review/list' },
   // { name: 'Log out', icon: FiLogOut, route: '/login' },
 ];
 
@@ -103,7 +103,8 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         {LinkItems.map((link) => (
           <RouteButton key={link.name} navFunc={navigate} routeTo={link.route} children={link.name} icon={link.icon} styles={sidebarCssBtn} />
         ))}
-        <AlertDialogButton alertActionTxt={"Logout"} alertBodyTxt={"Are you sure you want to logout?"} icon={FiLogOut} children='Logout' styles={sidebarCssLogoutBtn} alertHdrTxt={"Logout"} buttonTxt={"Logout"} />
+        <AlertDialogButton navFunc={navigate} routeTo='/login'
+        alertActionTxt={"Logout"} alertBodyTxt={"Are you sure you want to logout?"} icon={FiLogOut} children='Logout' styles={sidebarCssLogoutBtn} alertHdrTxt={"Logout"} buttonTxt={"Logout"} />
       </VStack>
     </Box>
   );
